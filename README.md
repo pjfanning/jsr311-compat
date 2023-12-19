@@ -11,7 +11,8 @@ This project aims to allow jersey-1.x work with newer versions of Jackson 2.
 
 * includes the `javax.ws.rs.core.NoContentException` class from JAX-RS rs-api jar
 * does not include `javax.ws.rs.core.Link` because this class needs too many other rs-api changes.
-  * Jackson JAXRS datatypes includes a serializer and deserializer for the Link class so if you need this then this jar is not of use to you 
+  * `jackson-datatype-jaxrs` includes a serializer and deserializer for the Link class so if you need this then this jar is not of use to you
+  * `jackson-datatype-jaxrs` does not appear to be used by Hadoop
 
 
 ## Usage
