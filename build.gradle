@@ -1,0 +1,83 @@
+plugins {
+    id 'java-library'
+    id 'signing'
+    id 'maven-publish'
+    id 'io.github.gradle-nexus.publish-plugin' version '1.3.0'
+}
+
+group = 'com.github.pjfanning'
+version = '0.1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+compileTestJava.dependsOn('copyLicenseToBuildResources')
+jar.dependsOn('copyLicenseToBuildResources')
+javadoc.dependsOn('copyLicenseToBuildResources')
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+nexusPublishing {
+    repositories {
+        sonatype()
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from(components.java)
+            pom {
+                name = 'jsr311-compat'
+                description = 'JSR-311 compatibility'
+                url = 'https://github.com/pjfanning/jsr311-compat'
+                licenses {
+                    license {
+                        name = 'EPL 2.0'
+                        url = 'http://www.eclipse.org/legal/epl-2.0'
+                    }
+                    license {
+                        name = 'GPL2 w/ CPE'
+                        url = 'https://www.gnu.org/software/classpath/license.html'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'developers'
+                        name = 'JAX-RS API Developers'
+                        email = 'jaxrs-dev@eclipse.org'
+                        url = 'https://github.com/eclipse-ee4j/jaxrs-api/graphs/contributors'
+                    }
+                    developer {
+                        id = 'pjfanning'
+                        name = 'PJ Fanning'
+                        url = 'https://github.com/pjfanning'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/pjfanning/jsr311-compat'
+                    connection = 'scm:git://github.com/pjfanning/jsr311-compat.git'
+                    developerConnection = 'scm:git://github.com/pjfanning/jsr311-compat.git'
+                }
+            }
+        }
+    }
+}
+
+signing {
+    def signingKey = findProperty("signingKey")
+    def signingPassword = findProperty("signingPassword")
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign publishing.publications.mavenJava
+}
+
+tasks.register('copyLicenseToBuildResources', Copy) {
+    from layout.projectDirectory.file("LICENSE.txt")
+    into layout.buildDirectory.dir("resources/main/META-INF")
+}
