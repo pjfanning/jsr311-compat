@@ -9,6 +9,8 @@ This project aims to allow jersey-1.x work with newer versions of Jackson 2.
 
 ## Usage
 
+This jar is published to Maven Central.
+
 ```gradle
 com.github.pjfanning:jsr311-compat:0.1.0
 ```
